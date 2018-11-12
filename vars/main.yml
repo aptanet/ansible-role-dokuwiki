@@ -1,0 +1,5 @@
+---
+## adjust variables for distribution and domain being used
+webroot: "/var/www"
+domain: example.com
+subdomain: wiki
