@@ -1,7 +1,7 @@
 ---
 ## adjust variables for distribution and domain being used
 webroot: "/var/www"
-webuser: www-data
+webowner: www-data
 webgroup: www-data
 domain: example.com
 subdomain: wiki
