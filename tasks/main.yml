@@ -1,0 +1,73 @@
+---
+## Dokuwiki configuration
+## ensure apache rewrite module is installed and enabled
+- name: install enable rewrite module in apache
+  apache2_module: state=present name=rewrite
+## create web directory for Dokuwiki and data
+- name: create directories if they don't exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ webuser }}"
+    group: "{{ webgroup }}"
+    mode: 0750
+  with_items:
+    - "{{ webroot }}/{{ domain }}"
+    - "{{ webroot }}/{{ domain }}/dokuwiki-data"
+## extract latest stable Dokuwiki tar file
+- name: extract dokuwiki
+  unarchive:
+    src: dokuwiki-stable.tgz
+    dest: "{{ webroot }}/{{ domain }}"
+    owner: "{{ webuser }}"
+    group: "{{ webgroup }}"
+    mode: 0750
+## find latest dokuwiki directory
+## extracts to standard format directory (check each update)
+## previous version will be left in place
+## timestamp on Dokuwiki directory will be based on release date not extract date
+- name: get list of dokuwiki installs
+  find:
+    paths: "{{ webroot }}/{{ domain }}"
+    file_type: directory
+    patterns: dokuwiki-[0-9]*
+  register: directories
+- name: get latest dokuwiki install directory
+  set_fact:
+    latest_directory: "{{ directories.files | sort(attribute='mtime') | last }}"
+## symlik subdomain to latest Dokuwiki directory
+- name: symlink to latest dokuwiki directory
+  file:
+    src: "{{ latest_directory.path }}"
+    dest: "{{ webroot }}/{{ domain }}/{{ subdomain }}"
+    state: link
+## create virtual host config from template
+- name: create virtualhost config
+  template:
+    src: dokuwiki.conf.j2
+    dest: "/etc/apache2/sites-available/{{ subdomain }}.{{ domain }}.conf"
+## adust Dokuwiki savedir to location separate from web directory
+- name: change savedir
+  lineinfile:
+    path: "{{ webroot }}/{{ domain }}/{{ subdomain }}/conf/dokuwiki.php"
+    regexp: "^$conf['savedir']"
+    line: "$conf['savedir']     = '../dokuwiki-data'; //where to store all the files"
+    state: present
+    backup: yes
+## enable Dokuwiki site
+- name: enable site
+  command: a2ensite {{ subdomain }}.{{ domain }}
+  notify: restart_apache2
+## TODO:
+## The default Dokuwiki install has default content in the data directory
+## the new data directory is empty, so the install.php configuration will 
+## fail
+## Need to upload default confguration files into conf directory, which 
+## depend on having a working install already to copy from
+## Possible options:
+## - Check new data directory for content (i.e. upgrade) and copy config across 
+## from previous one (requires identifying previous install, and will not work 
+## if the install is clean but with existing data; although that should upload 
+## after install)
+## - Keep standard config files in files directory (which is probably simplest, 
+## but less generic

@@ -1,0 +1,44 @@
+##
+## Dokuwiki site
+## logfiles currently hard coded
+## remember Let's Encrypt certificates
+## currently used behind a firewall on an intranet, so not done yet
+##
+<VirtualHost {{ wiki_ipv4}}:443>
+  ServerName {{ subdomain }}.{{ domain }}
+  ServerAdmin webmaster@{{ domain }}
+  DocumentRoot {{ webroot}}/{{ domain }}/{{ subdomain }}/
+  <Directory {{ webroot }}/{{ domain }}/{{ subdomain }}/>
+    Options +Indexes +FollowSymLinks +MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+  <LocationMatch "/(data|conf|bin|inc)/">
+    Order allow,deny
+    Deny from all
+    Satisfy all
+  </LocationMatch>
+  ErrorLog /var/log/apache2/error.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
+<VirtualHost [{{ wiki_ipv6 }}]:443>
+  ServerName {{ subdomain }}.{{ domain }}
+  ServerAdmin webmaster@{{ domain }}
+  DocumentRoot {{ webroot }}/{{ domain }}/{{ subdomain }}/
+  <Directory {{ webroot }}/{{ domain }}/{{ subdomain }}/>
+    Options +Indexes +FollowSymLinks +MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+  <LocationMatch "/(data|conf|bin|inc)/">
+    Order allow,deny
+    Deny from all
+    Satisfy all
+  </LocationMatch>
+  ErrorLog /var/log/apache2/ipv6.error.log
+  LogLevel warn
+  CustomLog /var/log/apache2/ipv6.access.log combined
+</VirtualHost>
