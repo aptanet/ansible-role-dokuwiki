@@ -8,7 +8,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ webuser }}"
+    owner: "{{ webowner }}"
     group: "{{ webgroup }}"
     mode: 0750
   with_items:
@@ -19,7 +19,7 @@
   unarchive:
     src: dokuwiki-stable.tgz
     dest: "{{ webroot }}/{{ domain }}"
-    owner: "{{ webuser }}"
+    owner: "{{ webowner }}"
     group: "{{ webgroup }}"
     mode: 0750
 ## find latest dokuwiki directory
