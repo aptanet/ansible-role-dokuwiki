@@ -9,6 +9,6 @@ Things to note about this repository:
 - you will need to download _dokuwiki-stable.tgz_ from https://www.dokuwiki.org/ and place it in the files directory
 - don't forget to customise the variables for your setup
 
-@aptanet
-Paul Tansom
-2018-11-12
+@aptanet  
+Paul Tansom  
+2018-11-12  
