@@ -1,6 +1,8 @@
 ---
 ## adjust variables for distribution and domain being used
 webroot: "/var/www"
+webuser: www-data
+webgroup: www-data
 domain: example.com
 subdomain: wiki
 wiki_ipv4: your_value_here
