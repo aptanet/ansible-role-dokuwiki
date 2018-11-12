@@ -3,3 +3,5 @@
 webroot: "/var/www"
 domain: example.com
 subdomain: wiki
+wiki_ipv4: your_value_here
+wiki_ipv6: your_value_here
