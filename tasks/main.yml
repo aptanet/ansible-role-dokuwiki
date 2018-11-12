@@ -44,7 +44,7 @@
 ## create virtual host config from template
 - name: create virtualhost config
   template:
-    src: dokuwiki.conf.j2
+    src: dokuwiki-apache.conf.j2
     dest: "/etc/apache2/sites-available/{{ subdomain }}.{{ domain }}.conf"
 ## adust Dokuwiki savedir to location separate from web directory
 - name: change savedir
