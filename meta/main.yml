@@ -2,5 +2,5 @@
 ## Require separate roles for installation of web server and php
 ## This role is based on Apache rather than Nginx
 dependencies:
-  - {role: apache2}
-  - {role: php}
+  - {role: server_apache2}
+  - {role: server_php}
