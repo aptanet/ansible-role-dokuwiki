@@ -26,7 +26,7 @@
 ## extracts to standard format directory (check each update)
 ## previous version will be left in place
 ## timestamp on Dokuwiki directory will be based on release date not extract date
-- name: get list of dokuwiki installs
+- name: get list of Dokuwiki installs
   find:
     paths: "{{ webroot }}/{{ domain }}"
     file_type: directory
@@ -35,8 +35,8 @@
 - name: get latest dokuwiki install directory
   set_fact:
     latest_directory: "{{ directories.files | sort(attribute='mtime') | last }}"
-## symlik subdomain to latest Dokuwiki directory
-- name: symlink to latest dokuwiki directory
+## symlink subdomain to latest Dokuwiki directory
+- name: symlink to extracted directory
   file:
     src: "{{ latest_directory.path }}"
     dest: "{{ webroot }}/{{ domain }}/{{ subdomain }}"
